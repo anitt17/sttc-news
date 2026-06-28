@@ -42,7 +42,7 @@ FDW: db_main dapat membaca tabel beritas di db_berita
 
 **1. Clone repository:**
 ```bash
-git clone <url-repo>
+git clone https://github.com/anitt17/sttc-news.git
 cd sttc-news
 ```
 
