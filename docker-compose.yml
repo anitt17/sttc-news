@@ -1,0 +1,66 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sttc_app
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - db_main
+      - db_berita
+    environment:
+      - DB_CONNECTION=pgsql
+      - DB_HOST=db_main
+      - DB_PORT=5432
+      - DB_DATABASE=sttc_main
+      - DB_USERNAME=sttc_user
+      - DB_PASSWORD=sttc_password
+      - DB_BERITA_HOST=db_berita
+      - DB_BERITA_PORT=5432
+      - DB_BERITA_DATABASE=sttc_berita
+      - DB_BERITA_USERNAME=sttc_user
+      - DB_BERITA_PASSWORD=sttc_password
+
+  db_main:
+    image: postgres:15
+    container_name: sttc_db_main
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: sttc_main
+      POSTGRES_USER: sttc_user
+      POSTGRES_PASSWORD: sttc_password
+    volumes:
+      - db_main_data:/var/lib/postgresql/data
+
+  db_berita:
+    image: postgres:15
+    container_name: sttc_db_berita
+    restart: unless-stopped
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: sttc_berita
+      POSTGRES_USER: sttc_user
+      POSTGRES_PASSWORD: sttc_password
+    volumes:
+      - db_berita_data:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: sttc_pgadmin
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@sttc.ac.id
+      PGADMIN_DEFAULT_PASSWORD: admin123
+
+volumes:
+  db_main_data:
+  db_berita_data:
